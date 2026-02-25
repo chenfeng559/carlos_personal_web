@@ -1,0 +1,65 @@
+---
+title: "Tensor Logic | Neural Architecture"
+date: "2025-10-05"
+description: "Analyzing the gap between tensor logic and learning, and a neural network architecture for pattern matching."
+---
+
+## The Gap Between Logic and Learning
+
+Classical logic is symbolic: propositions are discrete, rules are exact, and deduction is certain. Neural networks are sub-symbolic: representations are distributed, inference is approximate, and learning is statistical.
+
+Can we bridge this gap?
+
+## Tensor Logic
+
+Tensor logic treats logical operations as differentiable tensor operations:
+
+- **Truth values**: Real numbers in [0, 1]
+- **Logical AND**: $x \land y = xy$
+- **Logical OR**: $x \lor y = x + y - xy$
+- **Logical NOT**: $\neg x = 1 - x$
+
+These operations are differentiable, allowing gradient-based learning of logical rules.
+
+## Neural Architecture for Pattern Matching
+
+Consider a pattern matching task: given a sequence, identify if it matches a regular expression.
+
+Traditional approaches:
+1. **DFA compilation**: Fast but inflexible
+2. **Neural sequence models**: Flexible but slow
+
+Tensor logic offers a middle ground:
+
+```python
+# Simplified tensor logic pattern matcher
+def tensor_match(pattern, sequence):
+    # Pattern is a learned tensor representing the regex
+    # Sequence is embedded as token tensors
+
+    # State transitions are learned tensor operations
+    state = initial_state
+    for token in sequence:
+        state = transition(state, token, pattern)
+        state = normalize(state)  # Maintain probabilistic interpretation
+
+    return accept(state)
+```
+
+## Applications
+
+1. **Learning regex from examples**: Instead of hand-writing patterns, learn them from data
+2. **Fuzzy pattern matching**: Handle noisy inputs gracefully
+3. **Compositional generalization**: Combine learned patterns to handle novel situations
+
+## Limitations
+
+- **Computational cost**: Tensor operations are more expensive than discrete DFA transitions
+- **Interpretability**: Learned patterns are harder to debug than hand-written regex
+- **Theoretical guarantees**: Unlike DFAs, learned matchers don't have formal correctness proofs
+
+## Future Directions
+
+The most promising direction is neuro-symbolic integration: use neural networks for perception and pattern learning, but compile to symbolic representations for verification and deployment.
+
+This mirrors the brain's dual-process theory: fast, intuitive pattern matching (System 1) and slow, deliberate reasoning (System 2).

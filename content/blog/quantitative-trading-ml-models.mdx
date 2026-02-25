@@ -1,0 +1,125 @@
+---
+title: "AI Quantitative Trading: From Models to Quant Funds"
+date: "2025-04-29"
+description: "Constructing quantitative forecasts in a systematic way using modern machine learning techniques."
+---
+
+This post explores how modern quant funds use machine learning for trading, from feature engineering to model deployment.
+
+## The Quant ML Pipeline
+
+### 1. Data Engineering
+
+Raw market data is messy. The first step is cleaning and normalizing:
+
+- **Price normalization**: Adjusting for splits, dividends, corporate actions
+- **Time alignment**: Synchronizing data from multiple sources
+- **Outlier detection**: Identifying and handling bad ticks
+
+### 2. Feature Engineering
+
+Good features matter more than complex models:
+
+**Technical indicators**:
+- Moving averages (simple, exponential)
+- Momentum indicators (RSI, MACD)
+- Volatility measures (Bollinger Bands, ATR)
+
+**Microstructure features**:
+- Order book imbalance
+- Bid-ask spread dynamics
+- Trade flow toxicity (VPIN)
+
+**Alternative data**:
+- Sentiment from news and social media
+- Satellite imagery (parking lots, crop health)
+- Credit card transaction aggregates
+
+### 3. Model Architecture
+
+Modern quant funds use a mix of models:
+
+**Linear models** (still popular for their interpretability):
+$$r_t = \beta_0 + \sum_{i} \beta_i f_{i,t} + \epsilon_t$$
+
+**Tree-based models** (XGBoost, LightGBM):
+- Handle non-linear relationships
+- Robust to outliers
+- Fast inference
+
+**Neural networks**:
+- **MLPs**: For tabular factor data
+- **RNNs/LSTMs**: For time series patterns
+- **Transformers**: For multi-asset attention mechanisms
+
+### 4. Training Consideration
+
+**Purging and embargo**: Prevent information leakage by removing overlapping periods
+
+**Walk-forward analysis**: Train on past, validate on recent, test on future
+
+**Regime detection**: Markets change. Models should adapt or be specialized for different regimes.
+
+### 5. Risk Management
+
+Machine learning models can find spurious correlations:
+
+- **Position sizing**: Kelly criterion or mean-variance optimization
+- **Stop losses**: Hard and trailing stops
+- **Drawdown controls**: Reduce exposure during losing streaks
+
+## From Prediction to Portfolio
+
+A trading system needs more than return forecasts:
+
+1. **Alpha model**: Predict expected returns
+2. **Risk model**: Estimate covariance matrix
+3. **Transaction cost model**: Estimate market impact
+4. **Portfolio construction**: Optimize weights given constraints
+
+The optimizer balances expected return against risk and costs:
+
+$$\max_{w} \left( \alpha^T w - \lambda w^T \Sigma w - \text{TC}(w) \right)$$
+
+Subject to:
+- Budget constraint: $\sum_i w_i = 1$
+- Position limits: $|w_i| \leq c_i$
+- Sector exposure: $|w_{\text{sector}}| \leq s$
+
+## Practical Challenges
+
+### Overfitting
+
+With thousands of features and ML models, overfitting is inevitable:
+
+- Use simple models when possible
+- Regularization (L1, L2, dropout)
+- Ensemble methods
+- Paper trading for extended periods
+
+### Market Efficiency
+
+If a signal is profitable, others will find it:
+
+- Signals decay over time
+- Need continuous research pipeline
+- Combination of signals more stable than individual signals
+
+### Execution
+
+Predictions are worthless without execution:
+
+- **Market impact**: Large orders move prices
+- **Latency**: Speed matters for high-frequency signals
+- **Fill rates**: Not all intended trades execute
+
+## Conclusion
+
+Quantitative trading with ML is hard. The easy alpha has been arbitraged away. Success requires:
+
+1. Novel data sources
+2. Sophisticated feature engineering
+3. Robust model validation
+4. World-class execution infrastructure
+
+The firms that combine these elements will continue to generate alpha. The rest will become case studies in the difficulty of trading.

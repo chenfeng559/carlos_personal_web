@@ -1,0 +1,61 @@
+---
+title: "Information Theory is All You Need (to Understand LLMs)"
+date: "2026-02-17"
+description: "This post is a rewrite of the original post from 2024-02-27 with a more foundational approach on the same topic."
+---
+
+Everything a large language model does — predicting the next token, learning from data, understanding, and reasoning — can be traced back to a simple concept Claude Shannon published in 1948.
+
+That is not a coincidence. The math is always the same.
+
+## Information Content and Entropy
+
+Shannon's core insight: the information content of an event is inversely related to its probability:
+
+$$I(x) = -\log_2 p(x)$$
+
+A fair coin landing heads gives you 1 bit of information. A landing on its edge (p = 0.001) delivers just about 23 bits. The rarer the event, the more you learn when it happens.
+
+**Entropy** is the expected information content across all possible outcomes:
+
+$$H(X) = -\sum_{x} p(x) \log_2 p(x)$$
+
+This single formula defines the theoretical limit of lossless compression, the minimum average bits needed to encode a message, and — as it turns out — the learning objective for every modern language model.
+
+## Cross-Entropy and KL Divergence
+
+When we train a language model, we approximate the true distribution $P$ with our model's distribution $Q$. The cost of this approximation is measured by **cross-entropy**:
+
+$$H(P, Q) = -\sum_{x} p(x) \log_2 q(x)$$
+
+And the **KL divergence** tells us exactly how much information we lose:
+
+$$D_{KL}(P \| Q) = \sum_{x} p(x) \log_2 \frac{p(x)}{q(x)} = H(P, Q) - H(P)$$
+
+Minimizing cross-entropy is equivalent to minimizing KL divergence — making our model distribution $Q$ as close as possible to the true distribution $P$.
+
+## Why This Matters for LLMs
+
+Every token prediction is a probability distribution over the vocabulary. When GPT-4 predicts the next word in a sentence, it's computing:
+
+$$p(x_{t+1} | x_1, x_2, ..., x_t)$$
+
+The transformer architecture is just an efficient way to estimate these conditional probabilities. Attention mechanisms allow the model to condition on relevant context, and the feed-forward layers compute the probability distribution.
+
+## The Bit Complexity of Intelligence
+
+Here's where it gets interesting. If we measure the cross-entropy of a language model on human text, we're measuring something fundamental: how well the model compresses human knowledge.
+
+- GPT-2 (2019): ~3.5 bits per token
+- GPT-3 (2020): ~2.8 bits per token
+- GPT-4 (2023): ~2.1 bits per token
+
+Each reduction represents genuine understanding. The model has learned patterns in language, world knowledge, and reasoning capabilities — all captured in the compression metric.
+
+## Implications for AGI
+
+If intelligence is compression, and compression is prediction, then the path to AGI is clear: build models that achieve better cross-entropy on diverse tasks.
+
+But there's a limit. The entropy of English text is estimated at 0.6-1.3 bits per character. Beyond that lies the fundamental unpredictability of human creativity and randomness.
+
+The question isn't whether we'll reach AGI. It's whether we can recognize it when cross-entropy stops being a meaningful metric.

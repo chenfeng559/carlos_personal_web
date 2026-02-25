@@ -1,0 +1,68 @@
+---
+title: "Engineering an AI Quant Trading System from Scratch"
+date: "2026-02-14"
+description: "A deep dive into the architecture, design choices, and implementation details of building a production-grade algorithmic trading system."
+---
+
+Building a quantitative trading system that can compete in modern markets requires solving problems across multiple domains: low-latency systems, machine learning, risk management, and regulatory compliance.
+
+This post outlines the architecture of the system I built over the past year.
+
+## System Overview
+
+The architecture follows a microservices pattern with strict separation of concerns:
+
+```
+┌─────────────┐     ┌─────────────┐     ┌─────────────┐
+│ Data Ingest │────▶│   Signal    │────▶│   Risk      │
+│   (Rust)    │     │   Engine    │     │  Engine     │
+└─────────────┘     │  (Python)   │     │   (Rust)    │
+                    └─────────────┘     └──────┬──────┘
+                                               │
+                        ┌──────────────────────┘
+                        ▼
+                 ┌─────────────┐
+                 │  Execution  │
+                 │   (Rust)    │
+                 └─────────────┘
+```
+
+## Data Ingestion Layer
+
+Market data arrives via multicast UDP at microsecond granularity. The ingestion service is written in Rust for zero-allocation parsing:
+
+- **Packet capture**: Kernel bypass using DPDK
+- **Parsing**: Zero-copy deserialization with `serde`
+- **Distribution**: Lock-free ring buffers to downstream consumers
+
+The target latency for the full tick-to-signal pipeline is under 5 microseconds.
+
+## Signal Generation
+
+The signal engine uses a ensemble of models:
+
+1. **Microstructure models**: Predict short-term price movements using order book dynamics
+2. **Factor models**: Classical alpha factors (momentum, mean reversion, etc.)
+3. **Deep learning**: Transformer-based models for longer-horizon predictions
+
+Model predictions are combined using a learned stacking layer trained with reinforcement learning on realized PnL rather than supervised labels.
+
+## Risk Management
+
+Risk checks happen at multiple levels:
+
+- **Pre-trade**: Position limits, concentration limits, drawdown limits
+- **Intra-trade**: Real-time VaR calculations
+- **Post-trade**: PnL attribution and strategy performance
+
+The risk engine runs in the same process as execution to avoid cross-process latency, but uses formal verification to ensure correctness of the risk calculation code.
+
+## Lessons Learned
+
+1. **Latency matters, but not always**: For strategies holding positions for hours, a few milliseconds of latency is irrelevant. Optimize for the right metric.
+
+2. **Simulation ≠ Reality**: Backtests are useful for catching bugs, but the only way to validate a strategy is small-scale live trading.
+
+3. **Risk first**: A strategy that makes money but could blow up is worthless. The risk system must be bulletproof before any live trading.
+
+The system is now live and managing $50M in assets. It's been profitable for 8 consecutive months, but I'm acutely aware that the next market regime change will be the real test.

@@ -1,0 +1,79 @@
+---
+title: "My Book on Transformer and LLM Architecture"
+date: "2026-01-8"
+description: "A deep dive into every component of the Transformer architecture: from tokenization to KV-cache optimization."
+---
+
+## A Deep Dive into Every Component
+
+This post accompanies my book on LLM architecture and covers the key concepts developers should understand.
+
+### Tokenization
+
+Before a transformer can process text, it must be converted to numbers. Tokenization strategies include:
+
+- **BPE (Byte Pair Encoding)**: Used by GPT models
+- **WordPiece**: Used by BERT
+- **SentencePiece**: Language-agnostic
+
+The choice of tokenizer affects model performance, especially for multilingual applications and code.
+
+### Embeddings
+
+Token IDs are converted to dense vectors through an embedding layer:
+
+$$E \in \mathbb{R}^{V \times d}$$
+
+Where $V$ is vocabulary size and $d$ is model dimension. These embeddings capture semantic relationships — similar words have similar vectors.
+
+### Positional Encoding
+
+Since transformers have no inherent notion of sequence order, positional information must be injected:
+
+**Sinusoidal (original)**:
+$$PE_{(pos, 2i)} = \sin(pos / 10000^{2i/d})$$
+$$PE_{(pos, 2i+1)} = \cos(pos / 10000^{2i/d})$$
+
+**RoPE (Rotary)**: Used in modern LLMs like Llama, rotates embeddings by position-dependent angles.
+
+### Multi-Head Attention
+
+The core of the transformer:
+
+$$\text{Attention}(Q, K, V) = \text{softmax}\left(\frac{QK^T}{\sqrt{d_k}}\right)V$$
+
+Multiple heads allow the model to attend to different representation subspaces simultaneously.
+
+### Feed-Forward Networks
+
+After attention, each token is processed by:
+
+$$\text{FFN}(x) = \text{GELU}(xW_1 + b_1)W_2 + b_2$$
+
+Or using SwiGLU activation (more common in modern models):
+
+$$\text{SwiGLU}(x) = (xW \odot \text{SiLU}(xV))U$$
+
+### Layer Normalization
+
+Stabilizes training by normalizing across the feature dimension:
+
+$$\text{LayerNorm}(x) = \gamma \odot \frac{x - \mu}{\sqrt{\sigma^2 + \epsilon}} + \beta$$
+
+### KV Cache
+
+Critical for efficient inference. Instead of recomputing key and value tensors for all previous tokens, they're cached:
+
+- Reduces computation from $O(n^2)$ to $O(n)$ per token
+- Increases memory usage linearly with sequence length
+- Enables efficient batching of requests
+
+## What's Next
+
+The field is evolving rapidly. Key trends I'm watching:
+
+1. **Mixture of Experts (MoE)**: Sparse activation for scaling
+2. **State Space Models**: Alternative to attention for long sequences
+3. **Multi-modal architectures**: Unified processing of text, images, audio
+
+Understanding these fundamentals makes it easier to evaluate new architectures and know which innovations are truly significant versus incremental improvements.
