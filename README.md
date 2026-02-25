@@ -1,36 +1,79 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Carlos Personal Website
+
+A personal blog and portfolio website built with Next.js, MDX, Tailwind CSS, and shadcn/ui.
+
+## Tech Stack
+
+- **Next.js 16** - React framework with App Router
+- **MDX** - Write blog posts with JSX and Markdown
+- **Tailwind CSS** - Utility-first CSS framework
+- **shadcn/ui** - Beautiful UI components
+- **KaTeX** - Math rendering support
+- **TypeScript** - Type-safe development
+
+## Features
+
+- **About Page** - Personal introduction, projects, books, and timeline
+- **Blog** - MDX-based blog with math formula support
+- **Responsive Design** - Mobile-first design
+- **Static Export** - Generates static HTML for easy deployment
+- **Math Support** - KaTeX for rendering mathematical expressions
 
 ## Getting Started
 
-First, run the development server:
+### Development
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) to view the site.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Build
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build
+```
 
-## Learn More
+This generates a static site in the `dist` directory.
 
-To learn more about Next.js, take a look at the following resources:
+## Adding Blog Posts
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Add new `.mdx` files to the `content/blog` directory with frontmatter:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```mdx
+---
+title: "Your Post Title"
+date: "2026-02-26"
+description: "Brief description of the post"
+---
 
-## Deploy on Vercel
+Your content here...
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Math in Blog Posts
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Use LaTeX syntax for math:
+
+```mdx
+Inline math: $E = mc^2$
+
+Block math:
+$$
+\int_{-\infty}^{\infty} e^{-x^2} dx = \sqrt{\pi}
+$$
+```
+
+## Deployment
+
+The site is configured for static export and can be deployed to any static hosting service:
+
+- Vercel
+- GitHub Pages
+- Netlify
+- AWS S3 + CloudFront
+
+## License
+
+MIT License
